@@ -12,6 +12,7 @@ A: Every project deserves to have the cute deer as a logo.
 
 * Support for Strapi 4
 * Authentication
+* (Basic) Strapi5 Compatability
 * Permalinks
 * Caching and collecting assets from Strapi
 * Added UnitTests
@@ -38,6 +39,8 @@ plugins:
 strapi:
     # Your API endpoint (optional, default to http://localhost:1337)
     endpoint: http://localhost:1337
+    # Strapi5 compatability (optional, default false)
+    v5compat: true
     # Collections, key is used to access in the strapi.collections
     # template variable
     collections:
@@ -77,6 +80,12 @@ This works for the following collection *Photo* in Strapi:
 To access non Public collections (and by default all Strapi collections are non Public) you must to generate a token inside your strapi instance and set it as enviromental variable `STRAPI_TOKEN`.
 
 It is recommended that you will use new Content API tokens for this task: https://strapi.io/blog/a-beginners-guide-to-authentication-and-authorization-in-strapi
+
+###  (Basic) Strapi5 Compatability
+
+Strapi5 introduced breaking changes to the response format as well as the way published documents are accessed. (https://docs.strapi.io/dev-docs/migration/v4-to-v5/breaking-changes/)
+
+In order to use this plugin with strapi5, make sure to set `v5compat: true` in your `_config.yml`.
 
 ## Usage
 
