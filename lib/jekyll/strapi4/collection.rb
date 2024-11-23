@@ -30,14 +30,14 @@ module Jekyll
         # https://docs.strapi.io/developer-docs/latest/developer-resources/database-apis-reference/rest/sort-pagination.html#pagination-by-page
         uri = URI("#{@site.endpoint}/api/#{endpoint}#{path_params}")
         Jekyll.logger.debug "StrapiCollection get_document:" "#{collection_name} #{uri}"
-        response = strapi_request(uri)
+        response = strapi_request(uri, @site.v5compat)
         response.data
       end
 
       def get_document(did)
         uri_document = URI("#{@site.endpoint}/api/#{endpoint}/#{did}?populate=#{populate}")
         Jekyll.logger.debug "StrapiCollection iterating uri_document:" "#{uri_document}"
-        strapi_request(uri_document)
+        strapi_request(uri_document, @site.v5compat)
         # document
       end
 
@@ -51,7 +51,12 @@ module Jekyll
           if single_request?
             document.strapi_attributes = document.attributes
           else
-            document_response = get_document(document.id)
+            # use documentId if we are running against strapi5 https://docs.strapi.io/dev-docs/migration/v4-to-v5/breaking-changes/use-document-id
+            if @site.v5compat
+              document_response = get_document(document.documentId)
+            else
+              document_response = get_document(document.id)
+            end
             # We will keep all the attributes in strapi_attributes
             document.strapi_attributes = document_response['data']["attributes"]
           end

@@ -2,7 +2,7 @@
 # This is a helper method to authenticate during getting data from Strapi instance.
 require "json"
 
-def strapi_request(url)
+def strapi_request(url, v5compat = false)
     uri = URI(url)
     req = Net::HTTP::Get.new(uri)
     strapi_token = ENV['STRAPI_TOKEN']
@@ -14,6 +14,10 @@ def strapi_request(url)
             'Authorization'=>"Bearer #{strapi_token}"
         }
         req['Authorization'] = "Bearer #{strapi_token}"
+    end
+    # Add header to adjust response structure https://docs.strapi.io/dev-docs/migration/v4-to-v5/breaking-changes/new-response-format
+    if v5compat
+        headers['Strapi-Response-Format'] = "v4"
     end
     Jekyll.logger.info "Jekyll StrapiHTTP:", "Fetching entries from #{uri} using headers: #{headers.keys}"
     response = Net::HTTP.get_response(uri, headers)

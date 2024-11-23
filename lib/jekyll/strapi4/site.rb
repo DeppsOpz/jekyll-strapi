@@ -23,6 +23,10 @@ module Jekyll
     def endpoint
       has_strapi? and @config['strapi']['endpoint'] or "http://localhost:1337"
     end
+    
+    def v5compat
+      has_strapi? and @config['strapi']['v5compat'] or false
+    end
 
     def strapi_link_resolver(collection = nil, document = nil)
       return "/" unless collection != nil and @config['strapi']['collections'][collection]['permalink'] != nil
